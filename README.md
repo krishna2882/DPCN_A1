@@ -35,7 +35,7 @@ Generated tables in `output/`: `summary.json` (all headline network metrics),
 `community_distinctive_items.csv` (the per-item deviations quoted in report
 Section 6.4), `statement_extremes.csv`, `statement_clusters.csv` (membership
 and T/E/S/V composition of every statement cluster), and
-`sensitivity_analysis.txt`, and `validation.txt`.
+`sensitivity_analysis.txt` and `validation.txt`.
 
 ## Reproducing the analysis
 
@@ -112,14 +112,52 @@ used in the final report.
 
 ## Team
 
-- Team name: _(fill in)_
-- Members and individual contributions: _(fill in — see report, Section 7)_
+Team name: ConsistentProcess
+
+| Name | Roll Number |
+| --- | --- |
+| Vedant Pahariya | 2023112012 |
+| Siddhant Gudwani | 2024102042 |
+| Krishna Goel | 2023112009 |
+
+### Individual contribution
+
+Mirrors Section 7 of the report.
+
+**Vedant Pahariya — data pipeline and Respondent Opinion Network (33%)**
+Survey parsing and Likert encoding, missingness profiling and the completeness
+cutoff, median imputation (`data_prep.py`); respondent similarity matrix and the
+union k-NN construction, including the union-vs-mutual comparison that justified
+it (`build_networks.py`); network-level metrics — density, components, path
+length, clustering. Report Sections 3 and 4 (Steps 1–2), 5.1.
+
+**Siddhant Gudwani — Statement Network, centrality and community analysis (34%)**
+Item–item correlation network and threshold selection (`build_networks.py`);
+weighted degree, betweenness on the distance-transformed graph, eigenvector
+centrality and clustering; Louvain community detection on both networks;
+community opinion profiling, per-item community deviations, statement cluster
+tables and the consensus/polarization ranking (`analyze_networks.py`). Report
+Sections 4 (Steps 3–4), 5.2–5.4, 6.1–6.5.
+
+**Krishna Goel — robustness, validation and visualization (33%)**
+Sensitivity analysis across k, correlation threshold, imputation strategy,
+Louvain seeds and community-profile drift (`sensitivity_analysis.py`);
+split-half cluster replication, within-group correlation comparison, PCA and the
+centrality-vs-centroid test (`validation.py`); all six figures (`visualize.py`);
+pipeline orchestration and result export (`main.py`); repository documentation.
+Report Sections 4 (Step 5), 5.5, 6.6.
+
+Each member reviewed the sections written by the other two; the report text was
+drafted jointly against the outputs listed above.
+
+## Building the report
 
 The report exists in two interchangeable sources — edit whichever you prefer.
 
-**LaTeX (recommended for editing).** Fill in the five `\newcommand` lines at the
-top of `report/report.tex` (team name, members, course, GitHub URL, date) and
-the Section 7 contribution table, then:
+**LaTeX (recommended for editing).** Team members, roll numbers and the Section 7
+contribution table are already filled in. Two placeholders remain in the
+`\newcommand` lines at the top of `report/report.tex` — the team name and the
+GitHub URL. Fill those, then:
 
 ```bash
 cd report && pdflatex report.tex && pdflatex report.tex   # run twice
