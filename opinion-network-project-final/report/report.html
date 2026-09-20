@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Assignment 1 — Opinion Network Formation</title>
+<style>
+  @page { size: A4; margin: 18mm 17mm 16mm 17mm; }
+  body { font-family: "DejaVu Serif", Georgia, serif; font-size: 10.8pt; line-height: 1.45; color: #111; }
+  h1 { font-family: "DejaVu Sans", Helvetica, sans-serif; font-size: 19pt; margin: 0 0 2mm 0; }
+  h2 { font-family: "DejaVu Sans", Helvetica, sans-serif; font-size: 12.4pt; margin: 6mm 0 2mm 0;
+       border-bottom: 1px solid #ccc; padding-bottom: 1mm; }
+  h3 { font-family: "DejaVu Sans", Helvetica, sans-serif; font-size: 10.6pt; margin: 4mm 0 1.5mm 0; color: #1a3d6d; }
+  p { margin: 0 0 2.2mm 0; text-align: justify; }
+  ul { margin: 0 0 2.5mm 0; padding-left: 5mm; }
+  li { margin-bottom: 1.1mm; }
+  .subtitle { font-size: 11pt; color: #444; margin-bottom: 4mm; }
+  .meta { font-family: "DejaVu Sans", Helvetica, sans-serif; font-size: 9.4pt; line-height: 1.6;
+          background: #f6f7f9; border: 1px solid #e0e2e6; padding: 3mm 4mm; margin-bottom: 5mm; }
+  .fill { color: #b03030; font-weight: bold; }
+  table { border-collapse: collapse; width: 100%; font-family: "DejaVu Sans", Helvetica, sans-serif;
+          font-size: 9.1pt; margin: 2mm 0 1.5mm 0; }
+  th { background: #eef1f5; text-align: left; padding: 1.4mm 2mm; border: 1px solid #c9ced6; font-weight: bold; }
+  td { padding: 1.3mm 2mm; border: 1px solid #d5d9df; }
+  td.num, th.num { text-align: right; }
+  figure { margin: 2mm 0 3mm 0; text-align: center; page-break-inside: avoid; }
+  figure img { max-width: 100%; }
+  figcaption, .cap { font-size: 8.2pt; color: #555; font-style: italic; margin-top: 1mm; text-align: center; line-height: 1.3; }
+  code { font-family: "DejaVu Sans Mono", monospace; font-size: 8.8pt; background: #f3f4f6; padding: 0 0.7mm; }
+  pre { font-family: "DejaVu Sans Mono", monospace; font-size: 8.5pt; background: #f3f4f6;
+        border-left: 2px solid #c3c8d0; padding: 2mm 3mm; margin: 1.5mm 0 2.5mm 0; }
+  .tight { margin-bottom: 1mm; }
+  .avoid { page-break-inside: avoid; }
+</style>
+</head>
+<body>
+
+<h1>Assignment 1: Opinion Network Formation</h1>
+<div class="subtitle">A network analysis of a class survey on Technology, Education, Ethics and Environment</div>
+
+<div class="meta">
+<b>Team Name:</b> <span class="fill">[INSERT TEAM NAME]</span><br>
+<b>Team Members:</b> Vedant Pahariya (2023112012) &middot; Siddhant Gudwani (2024102042) &middot; Krishna Goel (2023112009)<br>
+<b>Course / Section:</b> <span class="fill">[INSERT COURSE]</span> &nbsp;&nbsp;|&nbsp;&nbsp; <b>Date:</b> 20 September 2026<br>
+<b>GitHub Repository:</b> <span class="fill">[INSERT GITHUB URL]</span>
+</div>
+
+<h2>1. Team</h2>
+<p>Team name: <span class="fill">[INSERT TEAM NAME]</span>.</p>
+<table style="width:45%">
+<tr><th>Name</th><th>Roll Number</th></tr>
+<tr><td>Vedant Pahariya</td><td>2023112012</td></tr>
+<tr><td>Siddhant Gudwani</td><td>2024102042</td></tr>
+<tr><td>Krishna Goel</td><td>2023112009</td></tr>
+</table>
+<p>Individual task ownership is documented in Section 7.</p>
+
+<h2>2. GitHub Link to Code</h2>
+<p>Repository: <span class="fill">[INSERT GITHUB URL]</span>. The repository holds the raw survey export, the full analysis pipeline, every generated figure and result table, and this report. It reproduces end-to-end from one command:</p>
+<pre>cd code &amp;&amp; pip install pandas numpy networkx matplotlib &amp;&amp; python main.py</pre>
+<p class="tight">Structure: <code>data/</code> (raw survey CSV) · <code>code/</code> (<code>data_prep.py</code>, <code>build_networks.py</code>, <code>analyze_networks.py</code>, <code>visualize.py</code>, <code>sensitivity_analysis.py</code>, <code>validation.py</code>, <code>main.py</code>) · <code>figures/</code> (PNG) · <code>output/</code> (CSV/JSON result tables) · <code>report/</code>. Every number quoted below is written to <code>output/</code> by the pipeline, including the item-level community deviations used in Section 6.4 and the cluster memberships used in Section 5.4.</p>
+
+<h2>3. Dataset Documentation</h2>
+<p>The dataset is the class's own opinion survey: four topic areas — Technology (T), Education (E), Ethics/Society (S), Environment (V) — with 15 five-point Likert statements each, 60 items in total. The raw export held 96 anonymised responses identified only by a numeric Response ID. No demographic fields were collected.</p>
+
+<h3>3.1 Encoding and missingness</h3>
+<p>Likert categories were mapped to integers (Strongly Disagree = 1 … Strongly Agree = 5). Two kinds of non-answer were treated as missing: blank cells and the literal value “No Comments”.</p>
+<p>Missingness was sharply bimodal. Of the 96 raw responses, 68 answered all 60 items and 17 missed between 1 and 4; separately, 6 respondents abandoned the survey partway (4 answered only the 15 Technology items, 2 left blocks of 10 and 15 items) and 5 submitted it entirely blank. Respondents missing more than 4 of 60 items were therefore excluded — the cutoff sits in the gap where the missingness distribution jumps from 4 straight to 10 — removing 11 respondents and leaving <b>85 retained (88.5%)</b>.</p>
+
+<h3>3.2 Imputation, and whether it matters</h3>
+<p>Within the retained sample, 37 cells (0.73% of the 85 × 60 = 5,100-cell matrix) were still missing and were filled with each item's column median, which is appropriate for ordinal data and avoids discarding an otherwise complete respondent over one unanswered statement.</p>
+<p>Rather than assume this choice is harmless, <code>sensitivity_analysis.py</code> re-runs the pipeline under mode imputation and under a complete-case subset that imputes nothing at all (the 68 fully complete respondents). The aggregate results are unaffected: all four category means move by at most 0.05 of a Likert point across the three variants. The respondent <i>partition</i>, however, is not reproduced exactly — the adjusted Rand index against the reported partition is 0.47 for mode imputation and 0.14 for complete cases. That is a property of the clustering, not of the imputation: re-running Louvain on the unchanged baseline graph with ten different random seeds gives a mean pairwise ARI of only 0.60 (3–5 communities). The honest reading, carried through Sections 5 and 6, is that community <i>count</i> and community <i>profiles</i> are stable while individual memberships are not.</p>
+
+<h3>3.3 Final analytic dataset</h3>
+<p>An 85 × 60 matrix of integers 1–5 (respondents × statements), 15 statements per category. The absence of demographic variables is a limitation revisited in Section 6.6.</p>
+
+<h2>4. Pipeline Followed</h2>
+<p>Implemented in Python (pandas, numpy, networkx, matplotlib); runs end-to-end via <code>code/main.py</code>.</p>
+<p class="tight"><b>Step 1 — Load and clean</b> (<code>data_prep.py</code>). Parse the CSV, encode responses to 1–5, drop the 11 low-completeness respondents, impute the remaining sparse gaps with the item median.</p>
+<p class="tight"><b>Step 2 — Respondent Opinion Network</b> (<code>build_networks.py</code>). Nodes are the 85 respondents. For each pair we compute the Pearson correlation between their 60-item opinion vectors. Pearson was chosen over raw distance or cosine because it captures similarity in the <i>pattern</i> of relative agreement — which statements a respondent endorsed more or less strongly than their own average — while factoring out differences in overall agreeableness (some respondents reach for “Agree” more readily across the board). Each respondent is joined to their 8 most-similar peers, symmetrised <b>by union</b>: edge (i, j) exists if i is in j's top 8 <i>or</i> j is in i's top 8, so final degree can exceed 8. The union rule was chosen over the stricter mutual rule because at k = 8 a mutual k-NN graph fragments badly on this data — 131 edges across 17 disconnected components — and cannot support the connectivity-based analysis in Section 5, whereas the union graph is a single connected component with 549 edges.</p>
+<p class="tight"><b>Step 3 — Statement (Topic) Network</b> (<code>build_networks.py</code>). Nodes are the 60 statements; two are joined when the Pearson correlation across the 85 respondents reaches |r| ≥ 0.35. This shows which statements are endorsed together in practice, independent of their a-priori T/E/S/V label.</p>
+<p class="tight"><b>Step 4 — Analyse</b> (<code>analyze_networks.py</code>). Weighted degree, betweenness, eigenvector centrality and local clustering for every node. Weighted degree and eigenvector centrality read the edge weight as connection strength, which is correct for them. Betweenness does not: networkx interprets an edge weight as a distance when routing shortest paths, so using raw similarity would make weakly-similar pairs look <i>closer</i>. Betweenness is therefore computed on a distance-transformed copy, d<sub>ij</sub> = 1 − w<sub>ij</sub>. Communities come from Louvain (networkx implementation, fixed seed) — a greedy heuristic that approximately maximises modularity, with no guarantee of the global optimum and, as Section 3.2 shows, real seed-to-seed variation here. We also profile each community's mean score per topic and each item's deviation from the cohort mean (<code>output/community_item_deltas.csv</code>), and rank all 60 statements by response variance to identify consensus and polarisation.</p>
+<p class="tight"><b>Step 5 — Sensitivity, validation and visualisation</b> (<code>sensitivity_analysis.py</code>, <code>validation.py</code>, <code>visualize.py</code>). Community detection is re-run across a range of k, across statement-network thresholds, across imputation strategies, across the union-vs-mutual choice, and across Louvain seeds, and the resulting community profiles are compared against the baseline (Section 6.6). Separately, <code>validation.py</code> split-half tests the statement clusters, runs a PCA on the item matrix, and checks whether centrality actually tracks proximity to the cohort's mean opinion (Sections 5.2 and 5.5). Force-directed layouts and the supporting charts are then drawn for both networks.</p>
+
+<h2>5. Analysis and Visualisations</h2>
+
+<h3>5.1 Respondent Opinion Network</h3>
+<p>The network has <b>85 nodes and 549 edges</b> (density 0.154), forms a single connected component, and has an average shortest path length of 2.04 — any two opinion profiles are reachable through roughly two intermediate peers. Average local clustering is 0.206: a respondent's similar peers are moderately likely to be similar to each other.</p>
+
+<figure>
+  <img src="../figures/respondent_network.png" style="width:76%">
+  <figcaption>Figure 1. Respondent Opinion Network. Node colour = Louvain community (4 communities, modularity 0.295); node size = weighted degree; edge thickness = similarity strength.</figcaption>
+</figure>
+
+<table class="avoid">
+<tr><th>Community</th><th class="num">n</th><th class="num">Technology</th><th class="num">Education</th><th class="num">Ethics</th><th class="num">Environment</th><th class="num">Overall</th></tr>
+<tr><td>Community 1</td><td class="num">24</td><td class="num">3.92</td><td class="num">3.98</td><td class="num">4.18</td><td class="num">4.33</td><td class="num">4.10</td></tr>
+<tr><td>Community 2</td><td class="num">32</td><td class="num">4.13</td><td class="num">3.86</td><td class="num">4.28</td><td class="num">4.40</td><td class="num">4.17</td></tr>
+<tr><td>Community 3</td><td class="num">21</td><td class="num">3.88</td><td class="num">3.79</td><td class="num">4.33</td><td class="num">4.33</td><td class="num">4.08</td></tr>
+<tr><td>Community 4</td><td class="num">8</td><td class="num">4.03</td><td class="num">4.21</td><td class="num">4.62</td><td class="num">4.72</td><td class="num">4.39</td></tr>
+</table>
+<div class="cap">Table 1. Mean Likert score (1–5) by topic category for each detected opinion community.</div>
+
+<figure>
+  <img src="../figures/community_profiles.png" style="width:64%">
+  <figcaption>Figure 2. Mean opinion score by category and community, corresponding to Table 1.</figcaption>
+</figure>
+
+<h3>5.2 Centrality: who represents the mainstream, and who is peripheral</h3>
+<p>Table 2 lists the five most and five least central respondents by weighted degree — those whose opinion profile is most, and least, shared with the rest of the cohort.</p>
+
+<table class="avoid">
+<tr><th>Response ID</th><th class="num">Weighted degree</th><th class="num">Betweenness</th><th class="num">Eigenvector</th><th>Interpretation</th></tr>
+<tr><td>104</td><td class="num">16.90</td><td class="num">0.083</td><td class="num">0.271</td><td>Most central by degree — mainstream opinion profile</td></tr>
+<tr><td>114</td><td class="num">15.84</td><td class="num">0.113</td><td class="num">0.235</td><td>Highest betweenness in the network</td></tr>
+<tr><td>49</td><td class="num">14.94</td><td class="num">0.071</td><td class="num">0.237</td><td>Highly central</td></tr>
+<tr><td>81</td><td class="num">14.32</td><td class="num">0.041</td><td class="num">0.246</td><td>Highly central</td></tr>
+<tr><td>61</td><td class="num">14.30</td><td class="num">0.053</td><td class="num">0.229</td><td>Highly central</td></tr>
+<tr><td>40</td><td class="num">2.59</td><td class="num">0.002</td><td class="num">0.019</td><td>Peripheral — atypical profile</td></tr>
+<tr><td>101</td><td class="num">2.57</td><td class="num">0.0003</td><td class="num">0.033</td><td>Peripheral</td></tr>
+<tr><td>125</td><td class="num">1.76</td><td class="num">0.000</td><td class="num">0.017</td><td>Peripheral</td></tr>
+<tr><td>120</td><td class="num">1.64</td><td class="num">0.001</td><td class="num">0.012</td><td>Peripheral</td></tr>
+<tr><td>119</td><td class="num">0.95</td><td class="num">0.000</td><td class="num">0.006</td><td>Most peripheral, near-zero betweenness</td></tr>
+</table>
+<div class="cap">Table 2. Top and bottom five respondents by weighted degree, with betweenness and eigenvector centrality. Full table: <code>output/respondent_centrality.csv</code>.</div>
+
+<p>Weighted degree measures connectivity in a similarity graph, which is not the same thing as holding a mainstream opinion, so we tested the link rather than assuming it (<code>validation.py</code>). Correlating each respondent's centrality with their proximity to the cohort centroid — the mean 60-item opinion profile — gives r = 0.83 for weighted degree and 0.82 for eigenvector centrality against correlation-to-centroid, and −0.45 for both against Euclidean distance to it. Degree does track mainstream-ness, and it tracks it on the correlation metric the network is built from; the weaker Euclidean figure reflects that distance also absorbs scale-use extremity, which Pearson deliberately factors out. Betweenness is the loosest of the three (r = 0.62), as expected for a path-based measure.</p>
+<p>Across all 85 respondents the three measures also agree closely with each other: degree correlates with betweenness at r = 0.89 and with eigenvector centrality at r = 0.97. The respondents most similar to the cohort also sit on the most shortest paths and are the ones connected to other well-connected peers; the most idiosyncratic sit on almost none. The eigenvector figures sharpen this — respondent 119's 0.006 against 104's 0.271 is a two-order-of-magnitude gap, far wider than the degree ratio, because peripheral respondents are not merely sparsely connected but connected to other sparsely-connected nodes. Section 6.5 takes up what this means.</p>
+
+<figure>
+  <img src="../figures/degree_distribution.png" style="width:52%">
+  <figcaption>Figure 3. Weighted degree across the 85 respondents. Right-skewed: most sit at roughly 4–8, a small group above 13 are highly representative of mainstream opinion, and a handful below 3 hold comparatively idiosyncratic profiles.</figcaption>
+</figure>
+
+<h3>5.3 Consensus and polarisation</h3>
+<p>Across all 60 statements, <b>80.3%</b> of responses were “Agree” or “Strongly Agree” against only <b>7.0%</b> “Disagree” or “Strongly Disagree”. The cohort is broadly agreeable — but not uniformly so.</p>
+
+<figure>
+  <img src="../figures/consensus_vs_polarizing.png" style="width:80%">
+  <figcaption>Figure 4. The five statements with the lowest response variance (left, near-unanimous) and the five with the highest (right, most divisive).</figcaption>
+</figure>
+
+<p>The most consensual statements span Education, Environment and Ethics: continuous learning and skill development throughout a career (E15, mean 4.72), corporate accountability for environmental impact (V13, 4.67), personal control over one's data (S05, 4.65). The most polarising are concentrated in Education, which supplies three of the top five: whether class attendance should be compulsory (E03, mean 2.02 — the most disagreed-with statement in the survey), whether traditional written exams accurately measure knowledge (E02, 2.81), and whether online learning can effectively complement classroom teaching (E04, 3.42, the highest-variance item overall). The other two are community service (S02, 3.84) and routine AI-assisted medical diagnosis (T08, 3.08).</p>
+
+<h3>5.4 Statement (Topic) Network</h3>
+<p>The Statement Network has <b>60 nodes and 169 edges</b> (density 0.096) across 11 components: a 50-item giant component plus 10 statements that correlate with nothing else at the threshold. Louvain finds 17 communities (modularity 0.306), most of them those singletons; three, however, are substantial — 13, 12 and 11 items — and cut across the survey's own T/E/S/V labelling.</p>
+
+<figure>
+  <img src="../figures/statement_network.png" style="width:100%">
+  <figcaption>Figure 5. Statement Correlation Network, giant component only, with an identical layout in both panels: (a) coloured by the survey's original category, (b) by detected correlation cluster. The colours do not line up — that mismatch is the finding.</figcaption>
+</figure>
+
+<figure>
+  <img src="../figures/statement_cluster_composition.png" style="width:50%">
+  <figcaption>Figure 6. Category composition of the three large clusters. Full membership: <code>output/statement_clusters.csv</code>.</figcaption>
+</figure>
+
+<ul>
+<li><b>Cluster 1 — 13 items</b> (5 Environment, 5 Ethics, 2 Technology, 1 Education): institutional accountability and civic/environmental responsibility. “Technology companies should be accountable for unethical use of their platforms” (S04) sits with “Companies should be held accountable for the environmental impacts of their activities” (V13).</li>
+<li><b>Cluster 2 — 12 items</b> (6 Ethics, 5 Environment, 1 Technology): personal and institutional sustainability practice — reducing personal energy consumption (V03), weighing environmental impact when purchasing (V10), building public trust in emerging technology (S15).</li>
+<li><b>Cluster 3 — 11 items</b> (5 Education, 3 Technology, 2 Environment, 1 Ethics): AI-enabled modernisation of learning — integrating AI into teaching (E12), formal AI education for engineers (T04), prioritising innovation over rote learning (E10).</li>
+</ul>
+
+<p>168 of the 169 edges are positive. The single negative edge (E03 “attendance should be compulsory” vs. E10 “prioritise innovation over rote learning”, r = −0.43) is retained with its sign stored as an edge attribute, but Louvain modularity as implemented here is not a signed-network method; with one negative edge the effect on the partition is negligible, though a lower threshold admitting more negative edges would require proper signed modularity (e.g. Gómez et al., 2009).</p>
+<h3>5.5 Do the clusters replicate?</h3>
+<p>No independent sample exists, so <code>validation.py</code> substitutes a split-half test: the 85 respondents are split at random 50 times, the statement network is rebuilt independently on each half, and the full-sample clusters are matched to their best counterpart in each half. The result splits cleanly into two claims.</p>
+<p>The <i>specific membership</i> does not replicate. Mean Jaccard overlap is 0.30, 0.36 and 0.40 for Clusters 1–3 — a half sample recovers roughly a third of a given cluster's items. Some of this is statistical power (each half estimates correlations from about 42 respondents) rather than pure artefact, but the conclusion stands: the exact item lists above are not a stable object.</p>
+<p>The <i>cross-cutting pattern</i> replicates strongly. Of 120 large clusters recovered across half samples, 117 (97.5%) still mix two or more survey categories, and the dominant category accounts for an average of only 47% of a cluster's items. Independently of clustering altogether, item pairs inside the same detected cluster correlate at mean |r| = 0.303 against 0.228 for pairs inside the same T/E/S/V category and 0.176 for all pairs — the detected clusters group co-answered items better than the survey's own labels do.</p>
+<p>A PCA on the standardised 60-item matrix does not add support for a clean latent structure. PC1 takes 19.8% of variance with 95% of its loadings sharing a sign, making it a general agreement factor consistent with the ceiling effect rather than a topical dimension; the scree after it is flat (5.6%, 5.0%, 4.6%, 4.6%), so no confirmatory factor structure is identifiable at n = 85.</p>
+<p>Taken together: the cohort's opinions are organised around something that cuts across the survey's subject labels, and the thematic readings offered above — institutional accountability, personal environmental responsibility, enthusiasm for AI-driven modernisation of education — remain exploratory descriptions of one sample's clusters rather than validated dimensions.</p>
+
+<h2>6. Results and Discussion</h2>
+
+<h3>6.1 A broadly consensual class, with a real ceiling effect</h3>
+<p>With 80.3% of the 5,100 retained responses at “Agree” or “Strongly Agree”, opinion skews strongly positive across all four topics. This has a direct methodological consequence: when almost everyone agrees with almost everything, little variance remains for statements to correlate on. That is the main reason the Statement Network is comparatively sparse and fragmented — a restriction-of-range problem, not evidence that the 10 isolated items are conceptually unrelated to the rest of the survey.</p>
+
+<h3>6.2 Environment is the closest thing to a shared class-wide value</h3>
+<p>Environment has the highest mean (4.39) and the lowest standard deviation (0.75) of the four categories. In Table 1 it is the top-scoring category in three of the four communities and exactly ties Ethics in the fourth (Community 3, both 4.327), so the precise claim is highest-or-joint-highest in every community, including Community 4.</p>
+<p>Because memberships shift between runs, we checked this across settings rather than reading it off one partition. Over 43 community-by-setting combinations (k = 6–10, three imputation schemes, several Louvain seeds), Environment is the top category in 31 and Ethics in the remaining 12, with Ethics never exceeding Environment by more than 0.17. In 40 of the 43, both Ethics and Environment outrank both Technology and Education. Environmental concern — paired closely with ethical concern — is a genuine class-wide value rather than the property of one faction, though Environment's specific first place over Ethics is narrower than Table 1 alone suggests.</p>
+
+<h3>6.3 Education is where the real disagreement lives</h3>
+<p>Education has the lowest mean (3.91) and the highest standard deviation (1.16), and supplies three of the five most polarising statements. The cohort leans against compulsory attendance (2.02) and against traditional exams as accurate measures of knowledge (2.81), and splits almost evenly on online learning (3.42). Crucially this is a <i>pedagogical</i> disagreement, not a topical one: the class is near-unanimous that continuous learning matters (E15, 4.72, the single most consensual item) and divided only on how learning should be delivered and assessed.</p>
+
+<h3>6.4 Communities differ in emphasis, not in direction</h3>
+<p>All four communities lean toward agreement in every category — there is no anti-technology or anti-environment faction. What separates them is relative emphasis, quantified per item in <code>output/community_item_deltas.csv</code>:</p>
+<ul>
+<li><b>Community 2</b> (largest, n = 32) is markedly cooler on online learning (E04, −0.96 against the cohort mean) yet more supportive of stricter AI regulation and cybersecurity investment (T12 +0.40, T13 +0.35) and of routine AI-assisted diagnosis (T08 +0.45).</li>
+<li><b>Community 3</b> (n = 21) is cool on generative AI as a learning aid (T02, −0.94) and on AI-personalised teaching (E12, −0.72) while still favouring AI regulation (T12, +0.50) — a coherent “cautious about AI in practice, supportive of AI oversight” stance.</li>
+<li><b>Community 4</b> (n = 8) is amplified on collaborative learning (E09, +1.08), research investment (E13, +1.05) and community service (S02, +0.92). Its largest deviation, though, runs the other way: T12, stricter AI regulation, at −0.95. Describing this group as simply “more agreeable” would misread it — it is more enthusiastic about educational and civic commitments and distinctly <i>less</i> enthusiastic about regulating AI.</li>
+</ul>
+<p>Because the network was built on Pearson correlation, which factors out each respondent's overall agreeableness, these reflect genuine differences in relative priority rather than some students being generically more positive. Two cautions apply. Community 4's n = 8 makes its means the least robust of the four. More importantly, Section 3.2 showed that individual memberships shift under reruns (mean pairwise ARI 0.60 across Louvain seeds), so these profiles should be read as recurring <i>opinion tendencies</i> in the cohort rather than as a fixed roster of who belongs where. The profiles themselves survive that instability: matching each run's communities to the baseline by maximum respondent overlap across ten settings, category means drift by 0.12 on average and 0.56 at worst, and every community in every setting scores above 3.5 on all four categories — the “no faction is against anything” finding is the most robust result in this report.</p>
+
+<h3>6.5 Centrality is one coherent phenomenon here, not two</h3>
+<p>A natural hypothesis in opinion networks is that centrality splits into two roles: well-connected mainstream respondents, and low-degree “bridge” respondents who hold minority views but structurally connect otherwise-separate groups. That does not hold here, once betweenness is computed with similarity properly converted to distance. Respondent 104 has the highest weighted degree and 114 the highest betweenness — both are highly-connected mainstream respondents. Every respondent in the bottom five by degree has betweenness at or near zero and eigenvector centrality below 0.034. With degree–betweenness r = 0.89 and degree–eigenvector r = 0.97, the three measures tell one story: the most idiosyncratic respondents are simply weakly attached to the network, not bridging distinct camps. We read this cautiously: no dedicated core–periphery test (e.g. Borgatti &amp; Everett) was run, so the defensible claim is a dense central group with a peripheral fringe, and no evidence in these centrality measures of a distinct low-degree bridging role.</p>
+
+<h3>6.6 Limitations and robustness</h3>
+<ul>
+<li><b>No demographics.</b> Major, year and similar fields were not collected, so the substantive drivers of community membership (Section 6.4) can only be inferred from response patterns, never verified against respondent characteristics.</li>
+<li><b>Self-selection.</b> The survey was optional and self-paced: 6 of 96 respondents abandoned it partway and 5 submitted it blank. Non-completion may correlate with engagement, so the retained sample may over-represent more opinionated students.</li>
+<li><b>Ceiling effect.</b> Correlation-based edges are conservative under the compressed response range (Section 6.1); a larger or more evenly distributed sample might reveal additional Statement Network structure.</li>
+<li><b>Analytic choices are checked, not assumed.</b> The respondent network is stable in k: for k = 6 through 10 the community count stays at 4, modularity stays within 0.25–0.33 and the graph remains a single component. The union-vs-mutual comparison at k = 8 (549 vs 131 edges, 1 vs 17 components) is what motivated the union rule. Imputation strategy moves the category means by at most 0.05.</li>
+<li><b>The partition itself is the weakest link.</b> Louvain on this graph returns 3–5 communities with a mean pairwise ARI of 0.60 across ten seeds, which is why Sections 5.1 and 6.4 lean on community <i>profiles</i> rather than on membership. The profiles are measured to be stable (mean drift 0.12, max 0.56 across ten settings), but a consensus-clustering approach over many restarts would put membership on firmer ground.</li>
+<li><b>Cluster membership does not replicate; the pattern does.</b> Split-half testing (Section 5.5) recovers only about a third of each statement cluster's items, while 97.5% of half-sample clusters remain cross-category. Claims here are therefore framed at the level of the pattern, not the item list; identifying the clusters themselves would need a larger sample.</li>
+<li><b>Statement-network threshold.</b> This network is genuinely threshold-sensitive: community count rises from 10 at r = 0.30 to 22 at r = 0.40, with modularity rising from 0.24 to 0.36. Combined with the replication result above, the three large clusters should be read as one sample's illustration of a cross-category pattern, not as a fixed set of item groupings.</li>
+</ul>
+
+<h2>7. Individual Contribution</h2>
+<p>This assignment is graded individually on documented contribution. The three workstreams below are of comparable scope: each covers roughly one third of the code in <code>code/</code>, one third of the generated artefacts in <code>figures/</code> and <code>output/</code>, and a corresponding share of this report.</p>
+<table>
+<tr><th style="width:20%">Team Member</th><th style="width:66%">Main Tasks</th><th class="num" style="width:14%">% Contribution</th></tr>
+<tr><td>Vedant Pahariya</td>
+<td><b>Data pipeline and Respondent Opinion Network.</b> Survey parsing and Likert encoding, missingness profiling and the completeness cutoff, median imputation (<code>data_prep.py</code>); respondent similarity matrix and the union k-NN construction, including the union-vs-mutual comparison that justified it (<code>build_networks.py</code>); network-level metrics — density, components, path length, clustering. Report Sections 3 and 4 (Steps 1–2), 5.1.</td>
+<td class="num">33%</td></tr>
+<tr><td>Siddhant Gudwani</td>
+<td><b>Statement Network, centrality and community analysis.</b> Item–item correlation network and threshold selection (<code>build_networks.py</code>); weighted degree, betweenness on the distance-transformed graph, eigenvector centrality and clustering; Louvain community detection on both networks; community opinion profiling, per-item community deviations, statement cluster tables and the consensus/polarisation ranking (<code>analyze_networks.py</code>). Report Sections 4 (Steps 3–4), 5.2–5.4, 6.1–6.5.</td>
+<td class="num">34%</td></tr>
+<tr><td>Krishna Goel</td>
+<td><b>Robustness, validation and visualisation.</b> Sensitivity analysis across k, correlation threshold, imputation strategy, Louvain seeds and community-profile drift (<code>sensitivity_analysis.py</code>); split-half cluster replication, within-group correlation comparison, PCA and the centrality-vs-centroid test (<code>validation.py</code>); all six figures (<code>visualize.py</code>); pipeline orchestration and result export (<code>main.py</code>); repository documentation. Report Sections 4 (Step 5), 5.5, 6.6.</td>
+<td class="num">33%</td></tr>
+</table>
+<p class="cap" style="text-align:left">Each member reviewed the sections written by the other two; the report text was drafted jointly against the outputs listed above.</p>
+
+</body>
+</html>

@@ -1,0 +1,21 @@
+community,item_id,category,delta_vs_cohort,cohort_mean,text
+community_1,E04,Education,0.826,3.424,High-quality online learning can effectively complement classroom teaching.
+community_1,T12,Technology,-0.654,4.071,Governments should introduce stricter regulations for Artificial Intelligence.
+community_1,T13,Technology,-0.482,4.024,Cybersecurity deserves greater investment than the development of new digital technologies.
+community_1,T01,Technology,0.472,3.612,Artificial Intelligence will improve society more than it will create problems.
+community_1,S02,Ethics,-0.46,3.835,Universities should encourage students to participate in community service activities.
+community_2,E04,Education,-0.955,3.424,High-quality online learning can effectively complement classroom teaching.
+community_2,T08,Technology,0.449,3.082,AI-assisted diagnosis should become routine in healthcare.
+community_2,T12,Technology,0.398,4.071,Governments should introduce stricter regulations for Artificial Intelligence.
+community_2,T13,Technology,0.351,4.024,Cybersecurity deserves greater investment than the development of new digital technologies.
+community_2,T09,Technology,-0.321,3.259,Autonomous vehicles will ultimately make transportation safer.
+community_3,T02,Technology,-0.94,4.035,Generative AI tools should be allowed as learning aids in higher education.
+community_3,E12,Education,-0.715,3.953,Artificial intelligence should be integrated into teaching and personalized learning.
+community_3,T08,Technology,-0.606,3.082,AI-assisted diagnosis should become routine in healthcare.
+community_3,T01,Technology,-0.517,3.612,Artificial Intelligence will improve society more than it will create problems.
+community_3,T12,Technology,0.501,4.071,Governments should introduce stricter regulations for Artificial Intelligence.
+community_4,E09,Education,1.075,3.8,Collaborative learning is generally more effective than individual learning.
+community_4,E13,Education,1.046,3.329,Universities should invest more resources in research than in expanding infrastructure.
+community_4,T12,Technology,-0.946,4.071,Governments should introduce stricter regulations for Artificial Intelligence.
+community_4,S02,Ethics,0.915,3.835,Universities should encourage students to participate in community service activities.
+community_4,E04,Education,0.826,3.424,High-quality online learning can effectively complement classroom teaching.

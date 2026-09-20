@@ -1,0 +1,47 @@
+=== 1. Split-half replication of the Statement Network clusters ===
+50 random splits x 2 halves = 100 independent rebuilds.
+Jaccard overlap of each full-sample cluster with its best match in a half.
+
+  cluster  size_full_sample  mean_jaccard  median_jaccard   p10   p90
+Cluster 1                13         0.301           0.294 0.210 0.422
+Cluster 2                12         0.357           0.350 0.227 0.500
+Cluster 3                11         0.399           0.382 0.262 0.547
+
+  Jaccard 1.00 = perfectly recovered; 0.50 = half the items shared.
+
+  Companion check -- do a half sample's large clusters still mix categories?
+  {'large_clusters_examined': 120, 'mixed_across_categories': 117, 'pct_mixed': 97.5, 'mean_largest_category_share': 0.469}
+
+
+=== 1b. Which labelling groups co-answered items together? ===
+                      grouping  n_pairs  mean_abs_r
+     all item pairs (baseline)     1770       0.176
+same survey category (T/E/S/V)      420       0.228
+         same detected cluster      223       0.303
+
+
+=== 2. Principal component structure of the 60 items ===
+Do the leading components align with the survey's categories or with
+the detected clusters? Fewer distinct groups among the top loadings =
+the tidier description.
+
+component var_explained  distinct_categories_in_top12 largest_category_share  distinct_clusters_in_top12 largest_cluster_share
+      PC1         19.8%                             3                   7/12                           4                  5/12
+      PC2          5.6%                             4                   6/12                           8                  3/12
+      PC3          5.0%                             4                   5/12                           7                  6/12
+      PC4          4.6%                             4                   6/12                           7                  3/12
+
+  First 4 components explain 35.0% of total variance.
+  PC1 loadings share a sign on 95% of items -> a general agreement factor, not a topical one.
+  Scree after PC1 is flat (5.6%, 5.0%, 4.6%, 4.6%), so no clean factor structure is identifiable at n = 85.
+
+
+=== 3. Does centrality track proximity to the cohort's average opinion? ===
+        measure  r_with_distance_to_centroid  r_with_correlation_to_centroid
+weighted_degree                       -0.453                           0.828
+    betweenness                       -0.304                           0.616
+    eigenvector                       -0.457                           0.815
+
+  Negative r with distance-to-centroid (and positive r with
+  correlation-to-centroid) means central respondents really do sit
+  closer to the cohort's average opinion profile.

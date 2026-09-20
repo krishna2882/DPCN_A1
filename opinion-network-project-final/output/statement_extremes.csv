@@ -1,0 +1,61 @@
+,variance,mean,category,text
+E15,0.2526610644257704,4.7176470588235295,Education,Continuous learning and skill development are essential throughout one's career.
+V13,0.31876750700280115,4.670588235294118,Environment,Companies should be held accountable for the environmental impacts of their activities.
+S05,0.32633053221288516,4.647058823529412,Ethics,Individuals should have greater control over how their personal data are collected and used.
+V06,0.3478991596638656,4.517647058823529,Environment,"Water conservation should be a priority in households, institutions, and industries."
+S09,0.34817927170868346,4.4941176470588236,Ethics,Universities should promote an inclusive environment where different viewpoints can be discussed respectfully.
+S11,0.36778711484593835,4.564705882352941,Ethics,People should be free to express differing opinions as long as they do not promote harm or discrimination.
+V01,0.3949579831932776,4.529411764705882,Environment,Climate change requires immediate global action.
+V15,0.39579831932773096,4.5058823529411764,Environment,Current generations have a responsibility to protect natural resources for future generations.
+E11,0.4011204481792717,4.635294117647059,Education,University curricula should be updated more frequently to match emerging technologies.
+V14,0.4168067226890756,4.552941176470588,Environment,International cooperation is necessary to effectively address environmental challenges.
+V07,0.46722689075630247,4.4941176470588236,Environment,Protecting biodiversity is essential for long-term human well-being.
+V11,0.48123249299719884,4.317647058823529,Environment,Technological innovation is essential for addressing environmental challenges.
+E10,0.4893557422969188,4.541176470588235,Education,Universities should prioritize innovation and problem-solving over rote learning.
+E14,0.4901960784313727,4.529411764705882,Education,Strong collaborations between universities and industry improve student education.
+S13,0.4957983193277312,4.294117647058823,Ethics,Critical evaluation of online information should be taught as a core educational skill.
+V09,0.5047619047619047,4.6,Environment,"Products should be designed to encourage reuse, repair, and recycling."
+V04,0.5047619047619047,4.4,Environment,Public transportation and non-motorized transport should be promoted even if they require additional public investment.
+S10,0.5154061624649859,4.235294117647059,Ethics,Scientific evidence should play an important role in public policy decisions.
+S14,0.5243697478991598,4.305882352941176,Ethics,Leaders should prioritize ethical decision-making even when it reduces short-term gains.
+V02,0.5358543417366948,4.447058823529412,Environment,Governments should prioritize investment in renewable energy over fossil fuels.
+S07,0.5383753501400562,4.482352941176471,Ethics,Equal opportunities should be prioritized regardless of a person's background.
+V08,0.5434173669467788,4.294117647058823,Environment,Universities should adopt environmentally sustainable campus practices even if implementation costs increase.
+E07,0.5719887955182074,4.305882352941176,Education,"Publishing research before graduation should be encouraged, but not mandatory."
+V05,0.5761904761904763,4.4,Environment,Single-use plastics should be significantly restricted.
+T15,0.5831932773109243,4.188235294117647,Technology,Society will increasingly depend on AI-assisted decision making.
+S12,0.6044817927170869,4.270588235294118,Ethics,Young people should actively participate in addressing societal challenges.
+T14,0.6100840336134452,4.4941176470588236,Technology,Social media algorithms contribute to opinion polarization.
+E08,0.6464985994397758,4.258823529411765,Education,Maintaining academic honesty is more important than obtaining high grades.
+T03,0.6661064425770307,4.023529411764706,Technology,Students should disclose the use of AI in assignments and reports.
+S06,0.6714285714285714,4.4,Ethics,"Combating online misinformation requires shared responsibility among users, platforms, and governments."
+T04,0.723249299719888,4.223529411764706,Technology,Every engineering student should receive formal education in AI.
+S15,0.741736694677871,4.258823529411765,Ethics,Building public trust is essential for responsible adoption of emerging technologies.
+V10,0.7487394957983193,4.035294117647059,Environment,Consumers should consider environmental impact when purchasing products.
+S03,0.7711484593837535,4.270588235294118,Ethics,New technologies should be evaluated for their societal impact before widespread deployment.
+T11,0.7739495798319327,4.152941176470589,Technology,Technology companies should explain how recommendation algorithms work.
+T06,0.7773109243697478,4.235294117647059,Technology,Most repetitive jobs will eventually be replaced by intelligent automation.
+T10,0.7974789915966388,4.188235294117647,Technology,Protection of personal data is more important than technological convenience.
+T05,0.8047619047619049,4.2,Technology,Artificial Intelligence will significantly accelerate scientific discovery.
+T13,0.8089635854341735,4.023529411764706,Technology,Cybersecurity deserves greater investment than the development of new digital technologies.
+E01,0.822689075630252,4.341176470588235,Education,Project-based learning develops deeper understanding than examination-oriented learning.
+S01,0.8240896358543418,4.2823529411764705,Ethics,Every individual has a responsibility to contribute positively to society.
+E05,0.8243697478991595,4.094117647058823,Education,Students should be encouraged to take courses outside their primary discipline.
+V12,0.8431372549019607,4.117647058823529,Environment,Environmental sustainability should be integrated into higher education curricula.
+V03,0.8565826330532212,3.976470588235294,Environment,Individuals should actively reduce their personal energy consumption.
+T09,0.8607843137254902,3.2588235294117647,Technology,Autonomous vehicles will ultimately make transportation safer.
+E13,0.8901960784313726,3.3294117647058825,Education,Universities should invest more resources in research than in expanding infrastructure.
+E06,0.923529411764706,3.8705882352941177,Education,Every undergraduate student should participate in at least one research project.
+S04,0.9882352941176469,4.152941176470589,Ethics,Technology companies should be accountable for unethical use of their platforms.
+T01,1.0022408963585439,3.611764705882353,Technology,Artificial Intelligence will improve society more than it will create problems.
+T02,1.0106442577030814,4.035294117647059,Technology,Generative AI tools should be allowed as learning aids in higher education.
+T12,1.018767507002801,4.070588235294117,Technology,Governments should introduce stricter regulations for Artificial Intelligence.
+S08,1.0288515406162464,3.9176470588235293,Ethics,Diverse teams generally make better decisions than homogeneous teams.
+E12,1.0453781512605045,3.9529411764705884,Education,Artificial intelligence should be integrated into teaching and personalized learning.
+E09,1.0904761904761908,3.8,Education,Collaborative learning is generally more effective than individual learning.
+T07,1.0974789915966383,4.211764705882353,Technology,Robots should replace humans in hazardous occupations whenever possible.
+S02,1.1392156862745093,3.835294117647059,Ethics,Universities should encourage students to participate in community service activities.
+T08,1.2193277310924369,3.0823529411764707,Technology,AI-assisted diagnosis should become routine in healthcare.
+E03,1.2375350140056023,2.023529411764706,Education,Class attendance should be compulsory for all courses.
+E02,1.2498599439775913,2.8117647058823527,Education,Traditional written examinations accurately measure a student's knowledge.
+E04,1.3899159663865546,3.4235294117647057,Education,High-quality online learning can effectively complement classroom teaching.

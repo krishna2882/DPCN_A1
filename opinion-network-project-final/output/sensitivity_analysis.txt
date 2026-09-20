@@ -1,0 +1,65 @@
+=== Respondent network: sensitivity to k (union k-NN, as used) ===
+ k  edges  connected  n_communities  modularity
+ 6    417       True              4      0.3299
+ 7    484       True              4      0.3329
+ 8    549       True              4      0.2951
+ 9    613       True              4      0.2750
+10    675       True              4      0.2504
+
+=== Respondent network: union vs. mutual k-NN at k=8 (robustness check) ===
+union (used in report)           edges= 549  connected=True  components= 1  communities=4  modularity=0.2951240159683438
+mutual (stricter alternative)    edges= 131  connected=False components=17  communities=23  modularity=0.5652558780541735
+
+=== Louvain seed stability on the baseline graph (reference level) ===
+Any ARI comparison below has to be read against how much the Louvain
+heuristic itself moves when only the random seed changes.
+
+  seed=0  communities=4  modularity=0.2892
+  seed=1  communities=4  modularity=0.3103
+  seed=2  communities=4  modularity=0.3092
+  seed=3  communities=4  modularity=0.3040
+  seed=4  communities=4  modularity=0.3012
+  seed=5  communities=4  modularity=0.3030
+  seed=6  communities=3  modularity=0.2967
+  seed=7  communities=5  modularity=0.2857
+  seed=8  communities=4  modularity=0.3080
+  seed=9  communities=5  modularity=0.2992
+
+  mean pairwise ARI across seeds = 0.602 (min 0.364, max 0.936)
+  -> the partition is only loosely identified; community COUNT (3-5, usually 4)
+     and the category-level profiles are the stable part, not individual memberships.
+
+=== Imputation strategy: does filling the 37 sparse cells matter? ===
+Baseline = median imputation (used for all reported results).
+Variants: mode imputation, and a complete-case subset that keeps only
+respondents who answered all 60 items (so nothing is imputed at all).
+
+                variant  n_respondents  edges  n_communities  modularity  ARI_vs_baseline  Tech  Educ  Ethi  Envi
+median (used in report)             85    549              4      0.2951           1.0000 4.000 3.909 4.294 4.391
+        mode imputation             85    545              6      0.3054           0.4744 4.002 3.911 4.300 4.391
+    complete cases only             68    434              5      0.2331           0.1350 4.032 3.942 4.340 4.411
+
+=== Community PROFILE stability across settings ===
+Memberships move (above); the report's substantive claims rest on the
+category profiles in Table 1. Each variant's communities are matched to
+the baseline's by maximum respondent overlap, then profiles compared.
+
+            variant  n_communities  matched  max_profile_drift  mean_profile_drift  Env_top_or_tied_in_all  all_categories_above_3.5
+              k = 6              4        3              0.215               0.083                   False                      True
+              k = 7              4        3              0.277               0.103                   False                      True
+   k = 8 (baseline)              4        4              0.000               0.000                    True                      True
+              k = 9              4        4              0.481               0.149                    True                      True
+             k = 10              4        3              0.189               0.089                   False                      True
+    mode imputation              6        4              0.261               0.085                   False                      True
+complete cases only              5        4              0.323               0.149                   False                      True
+     Louvain seed 1              4        3              0.262               0.107                   False                      True
+     Louvain seed 2              4        4              0.563               0.162                   False                      True
+     Louvain seed 3              4        3              0.186               0.087                   False                      True
+
+=== Statement network: sensitivity to correlation threshold ===
+ threshold  edges  components  n_communities  modularity
+      0.30    291           6             10      0.2401
+      0.33    213           7             13      0.2622
+      0.35    169          11             17      0.3060
+      0.38    129          14             18      0.3392
+      0.40    103          16             22      0.3640

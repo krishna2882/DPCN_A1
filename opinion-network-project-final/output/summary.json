@@ -1,0 +1,44 @@
+{
+  "n_responses_collected": 96,
+  "n_responses_retained": 85,
+  "n_responses_dropped": 11,
+  "n_cells_imputed": 37,
+  "respondent_network": {
+    "network": "Respondent",
+    "nodes": 85,
+    "edges": 549,
+    "density": 0.1538,
+    "avg_clustering": 0.2063,
+    "avg_degree": 12.92,
+    "components": 1,
+    "avg_path_length": 2.04
+  },
+  "statement_network": {
+    "network": "Statement",
+    "nodes": 60,
+    "edges": 169,
+    "density": 0.0955,
+    "avg_clustering": 0.1854,
+    "avg_degree": 5.63,
+    "components": 11,
+    "avg_path_length": null
+  },
+  "respondent_communities": {
+    "count": 4,
+    "modularity": 0.2951
+  },
+  "statement_communities": {
+    "count": 17,
+    "modularity": 0.306
+  },
+  "overall_mean_by_category": {
+    "Technology": 4.0,
+    "Education": 3.909,
+    "Ethics": 4.294,
+    "Environment": 4.391
+  },
+  "pct_agree_or_strongly_agree": 80.3,
+  "pct_disagree_or_strongly_disagree": 7.0,
+  "degree_betweenness_corr": 0.891,
+  "degree_eigenvector_corr": 0.967
+}

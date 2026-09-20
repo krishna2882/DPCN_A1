@@ -1,0 +1,18 @@
+cluster_rank,cluster_id,size,composition,items
+1,1,13,Education:1; Environment:5; Ethics:5; Technology:2,E11 S02 S04 S10 S11 S12 T03 T05 V05 V06 V07 V08 V15
+2,16,12,Environment:5; Ethics:6; Technology:1,S01 S03 S09 S13 S14 S15 T11 V03 V04 V10 V12 V13
+3,13,11,Education:5; Environment:2; Ethics:1; Technology:3,E07 E10 E12 E14 E15 S07 T02 T04 T06 V09 V14
+4,2,6,Environment:3; Ethics:1; Technology:2,S06 T07 T14 V01 V02 V11
+5,15,4,Ethics:1; Technology:3,S05 T10 T12 T13
+6,6,3,Education:3,E01 E05 E09
+7,0,1,Technology:1,T01
+8,3,1,Technology:1,T08
+9,4,1,Technology:1,T09
+10,5,1,Technology:1,T15
+11,7,1,Education:1,E02
+12,8,1,Education:1,E03
+13,9,1,Education:1,E04
+14,10,1,Education:1,E06
+15,11,1,Education:1,E08
+16,12,1,Education:1,E13
+17,14,1,Ethics:1,S08
